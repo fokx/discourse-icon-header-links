@@ -20,6 +20,27 @@ export default {
   name: "header-icon-links",
   initialize() {
     withPluginApi("0.8.41", (api) => {
+      // const controller = api.container.lookup("controller:topic");
+      // const model = controller.get("model");
+      // console.log(model);
+      // const controller2 = Discourse.__container__.lookup("controller:topic");
+      // const model2 = controller2.get("model");
+      // console.log(model2);
+      api.onPageChange(() => {
+        console.log("Page changed");
+        let pathname = window.location.pathname;
+        if (pathname.startsWith("/t/")){
+            let topic_id = pathname.split("/")[3];
+            document.getElementById('east-xj').href = `https://east.xjtu.app/tn/${topic_id}`;
+        } else{
+          document.getElementById('east-xj').href = `https://east.xjtu.app`;
+        }
+      });
+      // api.registerTopicFooterButton({
+      //   id: "flag",
+      //   icon: "flag",
+      //   action(context) { console.log(context.get("topic.external_id")) },
+      // });
       try {
         const site = api.container.lookup("service:site");
         let links = settings.header_links;
@@ -45,6 +66,7 @@ export default {
           if (link.width) {
             style = `width: ${escapeExpression(link.width)}px`;
           }
+          let a_custom_id = link.url === "https://east.xjtu.app" ? "east-xj" : null;
 
           const iconComponent = <template>
             <li
@@ -57,6 +79,7 @@ export default {
             >
               <a
                 class="btn no-text icon btn-flat"
+                id={{a_custom_id}}
                 href={{link.url}}
                 title={{link.title}}
                 target={{target}}
@@ -69,6 +92,11 @@ export default {
           </template>;
 
           const beforeIcon = ["chat", "search", "hamburger", "user-menu"];
+
+          // api.registerValueTransformer("home-logo-href", () => {
+          //   const currentUser = api.getCurrentUser();
+          //   return `https://xjtu.app/u/${currentUser.username}`;
+          // });
 
           api.headerIcons.add(link.title, iconComponent, {
             before: beforeIcon,
