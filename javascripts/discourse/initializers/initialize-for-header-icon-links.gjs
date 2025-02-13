@@ -27,7 +27,7 @@ export default {
       // const model2 = controller2.get("model");
       // console.log(model2);
       api.onPageChange(() => {
-        console.log("Page changed");
+        //console.log("Page changed");
         let pathname = window.location.pathname;
         if (pathname.startsWith("/t/")){
             let topic_id = pathname.split("/")[3];
